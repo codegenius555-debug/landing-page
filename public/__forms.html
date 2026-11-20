@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Project inquiry registration</title>
+  </head>
+  <body>
+    <form
+      name="project-inquiry"
+      method="POST"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+      hidden
+    >
+      <input type="hidden" name="form-name" value="project-inquiry" />
+      <input name="subject" />
+      <input name="name" />
+      <input name="email" type="email" />
+      <input name="company" />
+      <input name="role" />
+      <select name="capability">
+        <option>Software Engineering</option>
+      </select>
+      <select name="engagement">
+        <option>Dedicated team</option>
+      </select>
+      <input type="radio" name="stage" value="New product" />
+      <input type="radio" name="budget" value="Not sure yet" />
+      <input type="radio" name="timeline" value="Just exploring" />
+      <textarea name="message"></textarea>
+      <input type="checkbox" name="nda" value="Requested" />
+      <input name="bot-field" />
+    </form>
+  </body>
+</html>

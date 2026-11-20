@@ -1,0 +1,173 @@
+@import 'tailwindcss' source('../');
+
+@theme {
+  --color-ink: #121110;
+  --color-ink-2: #1a1816;
+  --color-ink-3: #24211e;
+  --color-line: #34302b;
+  --color-bone: #ece6da;
+  --color-mute: #a39b8e;
+  --color-dim: #6f685e;
+  --color-copper: #c9703f;
+  --color-copper-soft: #e0a27c;
+  --font-display: 'Instrument Serif', 'Times New Roman', serif;
+  --font-sans: 'Hanken Grotesk', ui-sans-serif, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-ink);
+}
+
+body {
+  margin: 0;
+  background: var(--color-ink);
+  color: var(--color-bone);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-copper);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-copper);
+  outline-offset: 3px;
+}
+
+/* Fixed, non-interactive grain overlay */
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.grid-lines {
+  background-image:
+    linear-gradient(to right, rgb(236 230 218 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(236 230 218 / 0.045) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+@utility eyebrow {
+  @apply font-mono text-[11px] uppercase tracking-[0.22em] text-mute;
+}
+
+@utility btn {
+  @apply relative inline-flex items-center gap-3 rounded-full px-6 py-3.5 text-sm font-semibold tracking-wide transition-[transform,background-color,color] duration-300 active:scale-[0.97];
+}
+@utility btn-primary {
+  @apply btn bg-copper text-ink hover:bg-copper-soft;
+}
+@utility btn-ghost {
+  @apply btn border border-line text-bone hover:border-bone/60 hover:bg-bone/5;
+}
+:is(.btn-primary, .btn-ghost) .arrow {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+:is(.btn-primary, .btn-ghost):hover .arrow {
+  transform: translateX(4px);
+}
+
+/* Page-load choreography */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes unveil {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: scale(1.06);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+.unveil {
+  animation: unveil 1.4s cubic-bezier(0.7, 0, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+
+/* Scroll-driven reveals (progressive enhancement, no JS) */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: rise linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 55%;
+  }
+}
+
+/* Tech-stack marquee */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee {
+  animation: marquee var(--speed, 48s) linear infinite;
+}
+.marquee-reverse {
+  animation-direction: reverse;
+}
+.marquee-wrap:hover .marquee {
+  animation-play-state: paused;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+.pulse-dot {
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+.outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(236 230 218 / 0.22);
+}
+
+/* Form fields */
+@utility field-label {
+  @apply mb-2 block font-mono text-[11px] uppercase tracking-[0.18em] text-mute;
+}
+@utility field {
+  @apply w-full border-0 border-b border-line bg-transparent px-0 py-3 text-lg text-bone placeholder:text-dim transition-colors focus:border-copper focus:outline-none focus-visible:outline-none;
+}
+select.field option {
+  background: var(--color-ink-2);
+  color: var(--color-bone);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
